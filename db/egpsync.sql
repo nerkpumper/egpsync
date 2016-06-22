@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-05-2016 a las 22:55:55
--- Versión del servidor: 10.1.8-MariaDB
--- Versión de PHP: 5.5.30
+-- Tiempo de generación: 22-06-2016 a las 03:19:19
+-- Versión del servidor: 10.1.9-MariaDB
+-- Versión de PHP: 5.6.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,6 +19,64 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `egpsync`
 --
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeviceConfigInsert` (IN `pcodigo` VARCHAR(15), IN `pfechainicio` DATE, IN `pfechafin` DATE, IN `pprecio` DOUBLE)  BEGIN
+
+	DECLARE vid INT;
+    
+    SELECT IFNULL(MAX(id), 0) INTO vid
+     FROM promocion
+	WHERE codigo = pcodigo;
+    
+    IF vid = 0 THEN
+		INSERT INTO promocion (codigo, fechainicio, fechafin, precio) 
+           VALUES(pcodigo, pfechainicio, pfechafin, pprecio) ;
+    ELSE
+		UPDATE promocion 
+           SET fechainicio = pfechainicio,
+               fechafin = pfechafin,
+               precio = pprecio
+		 WHERE id = vid;	
+        
+    END IF;
+    
+    
+
+	
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PromocionInsert` (IN `pcodigo` VARCHAR(15), IN `pfechainicio` VARCHAR(20), IN `pfechafin` VARCHAR(20), IN `pprecio` DOUBLE)  BEGIN
+
+	DECLARE vid INT;
+    
+    SELECT IFNULL(MAX(id), 0) INTO vid
+     FROM promocion
+	WHERE codigo = pcodigo;
+    
+    IF vid = 0 THEN
+		INSERT INTO promocion (codigo, fechainicio, fechafin, precio) 
+           VALUES(pcodigo,pfechainicio, pfechafin, pprecio) ;
+    ELSE
+		UPDATE promocion 
+           SET fechainicio = pfechainicio,
+               fechafin = pfechafin,
+               precio = pprecio
+		 WHERE id = vid;	
+        
+    END IF;
+    
+    
+
+	
+
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -4815,6 +4873,20 @@ INSERT INTO `perfume` (`id`, `codigo`, `genero`, `idtipofrag`, `idmarca`, `nombr
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `promocion`
+--
+
+CREATE TABLE `promocion` (
+  `id` int(11) NOT NULL,
+  `codigo` varchar(15) DEFAULT NULL,
+  `fechainicio` varchar(20) DEFAULT NULL,
+  `fechafin` varchar(20) DEFAULT NULL,
+  `precio` double DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='	';
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tipofrag`
 --
 
@@ -4866,6 +4938,13 @@ ALTER TABLE `perfume`
   ADD UNIQUE KEY `codigo_UNIQUE` (`codigo`);
 
 --
+-- Indices de la tabla `promocion`
+--
+ALTER TABLE `promocion`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `codigo_UNIQUE` (`codigo`);
+
+--
 -- Indices de la tabla `tipofrag`
 --
 ALTER TABLE `tipofrag`
@@ -4880,6 +4959,11 @@ ALTER TABLE `tipofrag`
 --
 ALTER TABLE `perfume`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4502;
+--
+-- AUTO_INCREMENT de la tabla `promocion`
+--
+ALTER TABLE `promocion`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `tipofrag`
 --
