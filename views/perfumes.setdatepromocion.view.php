@@ -61,14 +61,18 @@ var guardarPromocion = function()
 		isValid = false;
 	}
 
+	ff = ff.substring(6,10) + ff.substring(3,5) + ff.substring(0,2);
+	fi = fi.substring(6,10) + fi.substring(3,5) + fi.substring(0,2);
 	if (ff<fi)
 	{
+		//alert(ff.substring(6,10) + ff.substring(3,5) + ff.substring(0,2));
+		//alert(fi);
 		Materialize.toast('La Fecha Fin NO debe ser menor a la Fecha Inicio', 5000) // 4000 is the duration of the toast
 		isValid = false;
 	}
 
 	if (!isNumeric(precio))
-	{
+	{		
 		Materialize.toast('Es necesario agregar un Precio de Promoci&oacute;n', 5000) // 4000 is the duration of the toast
 		isValid = false;
 	}
